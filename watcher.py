@@ -11,7 +11,7 @@
 # Date: 07/12/2018
 # Version: 0.0.5
 
-import urllib2,re,datetime
+import urllib2,re,datetime,time
 
 class_regex = 's1wbv0ui-12 ffQWxW">([^<]*)<\/p>'
 request_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0"}
@@ -56,14 +56,20 @@ def value_to_int(x):
 # save to CSV format for ease of ingest/graphing later
 # data should be a list with 2 items
 def save_data(data,filename):
-    t = datetime.datetime.now().strftime('%Y-%m-%d,%H:%M:%S')
-    f = open(filename+'.txt','a')
-    f.write(t+','+data[0]+','+data[1]+'\n')
-    f.close()
+    try:
+        t = datetime.datetime.now().strftime('%Y-%m-%d,%H:%M:%S')
+        f = open(filename+'.txt','a')
+        f.write(t+','+data[0]+','+data[1]+'\n')
+        f.close()
+    except Exception, e:
+        #flailing
+        print '[!] Nope, not writing this one to disk...'
 
 def watch(subreddit):
     data = grab_subreddit(subreddit)
     output = get_stats(data)
     save_data(output,subreddit)
 
-watch('netsec')
+while True:
+    watch('netsec')
+    time.sleep(5)
