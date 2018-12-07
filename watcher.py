@@ -9,7 +9,7 @@
 #
 # Author: phl4nk
 # Date: 07/12/2018
-# Version: 0.0.5
+# Version: 0.0.7
 
 import urllib2,re,datetime,time
 
@@ -19,6 +19,7 @@ request_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) 
 # pull HTML from subreddit
 def grab_subreddit(subreddit):
     try:
+        print '[+] Crawling subreddit'
         request = urllib2.Request("https://www.reddit.com/r/"+subreddit, headers=request_headers)
         contents = urllib2.urlopen(request).read()
         return contents
@@ -60,6 +61,7 @@ def save_data(data,filename):
         t = datetime.datetime.now().strftime('%Y-%m-%d,%H:%M:%S')
         f = open(filename+'.txt','a')
         f.write(t+','+data[0]+','+data[1]+'\n')
+        print '[+] Written data to file:', data
         f.close()
     except Exception, e:
         #flailing
